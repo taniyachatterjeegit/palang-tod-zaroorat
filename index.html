@@ -6,191 +6,495 @@
 
 <title>Palang Tod: Zaroorat (S1 & S2)</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ===== RESET / BASE ===== */
+* { box-sizing: border-box; }
+
+:root {
+    --bg: #07060c;
+    --pink: #ff2e88;
+    --pink-light: #ff5ca8;
+    --violet: #b026ff;
+    --accent-grad: linear-gradient(135deg, var(--violet), var(--pink));
+    --glass: rgba(255, 255, 255, 0.045);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --text: #f4f0f6;
+    --muted: #b9a9c4;
+}
+
+html { scroll-behavior: smooth; }
+
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f0f0f, #1a0010);
-    color: #fff;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
-:root {
-    --pink: #ff2e88;
-    --pink-light: #ff5ca8;
+/* ===== AURORA BACKGROUND GLOW ===== */
+.aurora {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% -10%, rgba(176, 38, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 85% 20%, rgba(255, 46, 136, 0.14), transparent 50%),
+        var(--bg);
+}
+.aurora::before,
+.aurora::after {
+    content: "";
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+    animation: drift 18s ease-in-out infinite alternate;
+}
+.aurora::before {
+    background: radial-gradient(circle, rgba(176, 38, 255, 0.55), transparent 65%);
+    top: -15%;
+    left: -10%;
+}
+.aurora::after {
+    background: radial-gradient(circle, rgba(255, 46, 136, 0.5), transparent 65%);
+    bottom: -20%;
+    right: -12%;
+    animation-delay: -6s;
+    animation-duration: 22s;
+}
+@keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(6%, 4%) scale(1.12); }
 }
 
-/* 🔥 HERO BANNER */
+/* fine grain overlay */
+.grain {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== HERO ===== */
 header {
-    background: url('screenshots/banner.jpg') no-repeat center/cover;
-    height: 260px;
     position: relative;
+    height: 300px;
+    overflow: hidden;
+    isolation: isolate;
 }
-
+header .hero-img {
+    position: absolute;
+    inset: 0;
+    background: url('screenshots/banner.jpg') no-repeat center/cover;
+    transform: scale(1.08);
+    animation: heroZoom 14s ease-in-out infinite alternate;
+    z-index: -1;
+}
+@keyframes heroZoom {
+    from { transform: scale(1.08) translateY(0); }
+    to   { transform: scale(1.16) translateY(-2%); }
+}
 header::after {
     content: "";
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, #0f0f0f, transparent);
+    inset: 0;
+    background:
+        linear-gradient(to top, var(--bg) 4%, transparent 60%),
+        linear-gradient(115deg, rgba(7,6,12,0.78), transparent 55%);
 }
-
-header h1 {
+.hero-title {
     position: absolute;
-    bottom: 20px;
+    bottom: 22px;
     left: 20px;
+    right: 20px;
     z-index: 2;
-    background: rgba(0,0,0,0.6);
-    padding: 10px 16px;
-    border-left: 4px solid var(--pink);
-    border-radius: 6px;
-
-    font-size: clamp(22px, 5vw, 36px);
-    line-height: 1.2;
-    max-width: 90%;
+    animation: rise 1s cubic-bezier(.2,.7,.2,1) both;
+}
+.hero-title .badge {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    color: var(--pink-light);
+    margin-bottom: 10px;
+}
+.hero-title h1 {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 7vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.5px;
+    text-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+.hero-title h1 .sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.5em;
+    font-weight: 500;
+    color: var(--pink-light);
+    letter-spacing: 1px;
+}
+@keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* CONTAINER */
+/* ===== LAYOUT ===== */
 .container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 22px 18px 60px;
 }
 
-/* 💎 GLASS CARD */
+section { margin-bottom: 30px; }
+
+.section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-label::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent-grad);
+}
+
+/* ===== GLASS CARD ===== */
 .card {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(255,46,136,0.2);
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.06) inset,
+        0 24px 60px -20px rgba(0,0,0,0.7);
+    position: relative;
+    overflow: hidden;
+    animation: rise 1.1s cubic-bezier(.2,.7,.2,1) both;
+}
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
 }
 
-/* HEADINGS */
-h2, h3 {
+/* ===== META GRID ===== */
+.meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 18px;
+    margin: 0 0 22px;
+}
+.meta div { display: flex; flex-direction: column; gap: 2px; }
+.meta dt {
+    font-size: 0.66rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+}
+.meta dd {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 22px 0 8px;
+    color: #fff;
+}
+p { margin: 0 0 6px; line-height: 1.65; color: var(--muted); font-weight: 300; }
+
+/* ===== CAST ===== */
+.cast {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.cast li {
+    font-size: 0.82rem;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.cast li:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,46,136,0.5);
+    box-shadow: 0 8px 20px -8px rgba(255,46,136,0.5);
+}
+
+/* ===== PREMIUM BUTTONS ===== */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 24px;
+}
+.btn {
+    position: relative;
+    flex: 1 1 200px;
+    border: none;
+    padding: 15px 24px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    color: #fff;
+    overflow: hidden;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+}
+.btn .ic { font-size: 1.1em; }
+
+/* Primary — gradient fill + shine sweep + glow */
+.btn-primary {
+    background: var(--accent-grad);
+    background-size: 200% 200%;
+    box-shadow:
+        0 10px 30px -8px rgba(255,46,136,0.6),
+        0 0 0 1px rgba(255,255,255,0.12) inset;
+    animation: gradShift 4s ease infinite, glowPulse 2.8s ease-in-out infinite;
+}
+@keyframes gradShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 10px 30px -8px rgba(255,46,136,0.6), 0 0 0 1px rgba(255,255,255,0.12) inset; }
+    50% { box-shadow: 0 14px 40px -6px rgba(176,38,255,0.75), 0 0 0 1px rgba(255,255,255,0.2) inset; }
+}
+.btn-primary::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.2s ease-in-out infinite;
+}
+@keyframes shine {
+    0%   { left: -120%; }
+    60%  { left: 130%; }
+    100% { left: 130%; }
+}
+
+/* Backup — glass outline, fills on hover */
+.btn-backup {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    color: var(--text);
+    box-shadow: 0 0 0 1px transparent inset;
+}
+.btn-backup::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--accent-grad);
+    opacity: 0;
+    transition: opacity .35s;
+    z-index: -1;
+}
+.btn-backup:hover::before { opacity: 1; }
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+.btn:active { transform: translateY(-1px) scale(0.99); }
+
+/* countdown */
+#count {
+    margin-top: 14px;
+    min-height: 20px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
     color: var(--pink-light);
 }
+#count:empty { min-height: 0; }
 
-/* BUTTONS */
-button {
-    border: none;
-    padding: 12px 22px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 10px 5px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.download-btn {
-    background: linear-gradient(45deg, var(--pink), var(--pink-light));
-    color: white;
-    box-shadow: 0 0 15px rgba(255,46,136,0.5);
-}
-
-.backup-btn {
-    background: #444;
-    color: white;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* 📸 GALLERY */
+/* ===== GALLERY ===== */
 .screenshots {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
 }
-
 .screenshots img {
     width: 100%;
-    border-radius: 10px;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 14px;
     cursor: pointer;
-    transition: 0.3s;
+    border: 1px solid var(--glass-border);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s;
+    animation: fadeUp .6s ease both;
 }
-
 .screenshots img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px var(--pink);
+    transform: translateY(-4px) scale(1.03);
+    border-color: rgba(255,46,136,0.6);
+    box-shadow: 0 14px 34px -10px rgba(255,46,136,0.55), 0 0 0 1px rgba(255,46,136,0.3);
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* MODAL */
+/* ===== MODAL ===== */
 .modal {
     display: none;
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.95);
+    inset: 0;
+    z-index: 100;
+    background: rgba(5,4,10,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn .25s ease;
 }
-
 .modal img {
-    max-width: 90%;
-    margin: 5% auto;
-    display: block;
+    max-width: 92%;
+    max-height: 90vh;
+    border-radius: 14px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.8);
+    animation: zoomIn .3s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+
+/* footer */
+.foot {
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-top: 30px;
 }
 
+@media (min-width: 600px) {
+    .meta { grid-template-columns: repeat(4, 1fr); }
+    header { height: 340px; }
+}
 </style>
 </head>
 
 <body>
 
+<div class="aurora"></div>
+<div class="grain"></div>
+
 <header>
-<h1>
-Palang Tod: Zaroorat 💗<br>
-<span style="font-size:0.7em;color:#ff5ca8;">(Season 1 & 2)</span>
-</h1>
+    <div class="hero-img"></div>
+    <div class="hero-title">
+        <span class="badge">Premium · 1080p WEB-DL</span>
+        <h1>
+            Palang Tod: Zaroorat 💗
+            <span class="sub">Season 1 & 2</span>
+        </h1>
+    </div>
 </header>
 
 <div class="container">
 
-<div class="card">
+    <div class="card">
+        <p class="section-label">Details</p>
+        <dl class="meta">
+            <div><dt>Title</dt><dd>Palang Tod: Zaroorat</dd></div>
+            <div><dt>Genre</dt><dd>🔞</dd></div>
+            <div><dt>Release</dt><dd>2022 (S1: April | S2: September)</dd></div>
+            <div><dt>Language</dt><dd>Hindi</dd></div>
+            <div><dt>Quality</dt><dd>1080p WEB-DL</dd></div>
+            <div><dt>Audio</dt><dd>AAC 2.0CH</dd></div>
+            <div><dt>Format</dt><dd>MKV</dd></div>
+            <div><dt>Size</dt><dd>Various</dd></div>
+        </dl>
 
-<p><b>Title:</b> Palang Tod: Zaroorat</p>
-<p><b>Genre:</b> 🔞 </p>
-<p><b>Release:</b> 2022 (S1: April | S2: September)</p>
-<p><b>Language:</b> Hindi</p>
-<p><b>Quality:</b> 1080p WEB-DL</p>
-<p><b>Audio:</b> AAC 2.0CH</p>
-<p><b>Format:</b> MKV</p>
-<p><b>Size:</b> Various</p>
+        <h3>Storyline</h3>
+        <p>
+            Kamlesh is paralyzed and cared for by Savita. Their relationship takes a bold turn,
+            leading to emotional and physical complexities. In Season 2, things become more intense
+            when Umesh discovers their secret and starts blackmailing Savita, creating tension and drama.
+        </p>
 
-<h3>Storyline</h3>
-<p>
-Kamlesh is paralyzed and cared for by Savita. Their relationship takes a bold turn,
-leading to emotional and physical complexities. In Season 2, things become more intense
-when Umesh discovers their secret and starts blackmailing Savita, creating tension and drama.
-</p>
+        <h3>Cast</h3>
+        <ul class="cast">
+            <li>Sharanya Jit Kaur (Savita)</li>
+            <li>Neeraj Singh Rajput (Ganesh)</li>
+            <li>Ravi Mishra (Kamlesh)</li>
+            <li>Vaidehee Bhave (Tejaswini)</li>
+            <li>Bhavesh Kantaria</li>
+            <li>Gaurav Raaj (Umesh)</li>
+        </ul>
 
-<h3>Cast</h3>
-<ul>
-<li>Sharanya Jit Kaur (Savita)</li>
-<li>Neeraj Singh Rajput (Ganesh)</li>
-<li>Ravi Mishra (Kamlesh)</li>
-<li>Vaidehee Bhave (Tejaswini)</li>
-<li>Bhavesh Kantaria</li>
-<li>Gaurav Raaj (Umesh)</li>
-</ul>
+        <div class="actions">
+            <button class="btn btn-primary" onclick="startDownload()"><span class="ic">⬇</span> Download</button>
+            <button class="btn btn-backup" onclick="startBackup()"><span class="ic">☁</span> Backup Download</button>
+        </div>
+        <div id="count"></div>
+    </div>
 
-<!-- DOWNLOAD -->
-<button class="download-btn" onclick="startDownload()">Download</button>
-<button class="backup-btn" onclick="startBackup()">Backup Download</button>
+    <section>
+        <p class="section-label">Screenshots</p>
+        <div class="screenshots" id="gallery"></div>
+    </section>
 
-<div id="count"></div>
-
-</div>
-
-<!-- SCREENSHOTS -->
-<h2>Screenshots</h2>
-<div class="screenshots" id="gallery"></div>
-
+    <p class="foot">Palang Tod: Zaroorat · S1 & S2</p>
 </div>
 
 <!-- IMAGE MODAL -->
 <div id="imgModal" class="modal" onclick="this.style.display='none'">
-<img id="modalImg">
+    <img id="modalImg">
 </div>
 
 <script>
@@ -205,7 +509,8 @@ for (let i = 1; i <= 70; i++) {
     img.onerror = () => img.remove();
 
     img.onclick = () => {
-        document.getElementById("imgModal").style.display = "block";
+        const modal = document.getElementById("imgModal");
+        modal.style.display = "flex";
         document.getElementById("modalImg").src = img.src;
     };
 
